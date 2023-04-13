@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Menu from "./components/Menu";
 import { Link } from "react-router-dom";
+// import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
 export default function ManageAdmins(){
 
@@ -42,55 +43,91 @@ return(
                     </button>                   
                 </div>
                 <div className="flex flex-col bg-slate-900">
-                <div className="mx-4 bg-white w-auto h-80 overflow-scroll ">
-            <div className="">
-                <ul className="font-semibold grid grid-cols-7 mx-3 bg-zinc-200 p-3 ">
-                    <li>No</li>
-                    <li>Full Name</li>
-                    <li>Username</li>
-                    <li>Phone</li>
-                    <li>Station</li>
-                    <li>userRole</li>
-                    <li>Actions</li>
-                </ul>
-                {admin && admin.map((user) => (
-                    <ul key={user._id}
-                        className="font-normal grid grid-cols-7 mx-3 bg-zinc-100 p-3">
-                        <li>{user._id}</li>
-                        <li>{user.firstname} {user.middlename} {user.lastname}</li>
-                        <li>{user.username}</li>
-                        <li>{user.phone}</li>
-                        <li>{user.station}</li>
-                        <li>{user.userRole}</li>
-                        <li className="space-x-5 flex text-base">
-                            <div>
-                                <Link to={`/update/${user._id}`}>
-                                    Update
-                                    {/* <img
-                                        className="w-8 h-8"
-                                        src={update} alt="" /> */}
-                                </Link>
-                            </div>
-                            <div className=""  >
-                                Delete
-                                {/* <img 
-                                    
-                                    className="w-8 h-8"
-                                    src={del} alt="" /> */}
-                            </div>
-                            
-                        </li>
-                    </ul>
-                ))
-                }
-                {error && 
-                <div className="bg-red-300 text-red-900 text-1xl p-3 m-2">
-                    {error}
-                </div>
-                }
-            </div>
-        </div>
+                <div className="mx-0 bg-white w-auto h-80 overflow-scroll ">
+                    <table className="table w-full mx-2 p-1 border-collapse border border-slate-900 text-left">
+                        <thead>
+                            <tr className="border text-white bg-slate-900">
+                                <th scope="col" className="p-3">#</th>
+                                <th scope="col">Full Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Station</th>
+                                <th scope="col">userRole</th>
+                                <th className="text-center" scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {admin && admin.map((user, index) => (
+                            <tr className="border">
+                                 <td className="p-3 ">{index + 1}</td>
+                                <td>{user.firstname} {user.middlename} {user.lastname}</td>
+                                <td>{user.username}</td>
+                                <td>{user.phone}</td>
+                                <td>{user.station}</td>
+                                <td>{user.userRole}</td>
+                                <td className="flex text-base space-x-10 ">
+                                    <div>
+                                        <Link to={`/update/${user._id}`}>
+                                            Update
+                                        </Link>
+                                    </div>
+                                    <div className=""  >
+                                        Delete
+                                    </div>
+                                </td>
+                            </tr>
+                            ))}
+                        </tbody>
+                        {error && 
+                        <div className="bg-red-300 text-red-900 text-1xl p-3 m-2">
+                            {error}
+                        </div>
+                        }
+                    </table>
 
+
+                    {/* <div className="">
+                        <ul className="font-semibold grid grid-cols-7 mx-3 bg-zinc-200 p-3 ">
+                            <li>No</li>
+                            <li>Full Name</li>
+                            <li>Username</li>
+                            <li>Phone</li>
+                            <li>Station</li>
+                            <li>userRole</li>
+                            <li>Actions</li>
+                        </ul>
+                        {admin && admin.map((user) => (
+                            <ul key={user._id}
+                                className="font-normal grid grid-cols-7 mx-3 bg-zinc-100 p-3">
+                                <li>{user._id}</li>
+                                <li>{user.firstname} {user.middlename} {user.lastname}</li>
+                                <li>{user.username}</li>
+                                <li>{user.phone}</li>
+                                <li>{user.station}</li>
+                                <li>{user.userRole}</li>
+                                <li className="space-x-5 flex text-base">
+                                    <div>
+                                        <Link to={`/update/${user._id}`}>
+                                            Update
+                                           
+                                        </Link>
+                                    </div>
+                                    <div className=""  >
+                                        Delete
+                                       
+                                    </div>
+                                    
+                                </li>
+                            </ul>
+                        ))
+                        }
+                        {error && 
+                        <div className="bg-red-300 text-red-900 text-1xl p-3 m-2">
+                            {error}
+                        </div>
+                        }
+                    </div> */}
+                </div>
                 </div>
             </div>
         </div>
