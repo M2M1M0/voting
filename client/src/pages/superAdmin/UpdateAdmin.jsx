@@ -5,19 +5,19 @@ import Menu from "./components/Menu";
 
 export default function UpdateAdmin(){
 
-    const [ voter, setVoter ] = useState([])
+    const [ admin, setAdmin ] = useState([])
     const [ error, setError ] = useState(false)
     const [ success, setSuccess ] = useState(false)
     const { id } = useParams()
 
     const handleChange = (e) => {
-        setVoter({...voter, [e.target.name] : e.target.value})
+        setAdmin({...admin, [e.target.name] : e.target.value})
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{
-            await axios.put("http://localhost:8800/updateVoter/" + id, voter)
+            await axios.put("http://localhost:8800/updateParty/" + id, admin)
                 .then(res => {
                     setSuccess("Update Success")
             })
@@ -28,9 +28,9 @@ export default function UpdateAdmin(){
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8800/voter/"+id)
+        axios.get("http://localhost:8800/admin/"+id)
             .then(response => {
-                setVoter(response.data[0])
+                setAdmin(response.data[0])
             })
             .catch(error => {
                 setError(error.message)
@@ -47,13 +47,13 @@ return(
         <div className="pl-2 w-4/5">
             <div className="flex flex-col h-screen">
                 <div className="h-16 w-full flex flex-col text-center bg-gray-950 text-white">
-                    <h1 className='font-semibold text-base sm:text-2xl'>Update Voter</h1>
+                    <h1 className='font-semibold text-base sm:text-2xl'>Update Admin</h1>
                     <p className=''>National Election Board of Ethiopia</p>
                 </div>
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
                 
                     <div className="text-center mb-8 text-2xl">
-                        <span className="p-3">Username: </span>  {voter.username}
+                        <span className="p-3">Username: </span>  {admin.username}
                     </div>
                     <hr />
                     <div
@@ -64,7 +64,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={voter.fname}
+                                    defaultValue={admin.fname}
                                     name='fname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -74,7 +74,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={voter.midname}
+                                    defaultValue={admin.midname}
                                     name='midname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -84,7 +84,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={voter.lname}
+                                    defaultValue={admin.lname}
                                     name='lname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -99,7 +99,7 @@ return(
                                         placeholder='+251..'
                                         maxLength={10}
                                         minLength={10}
-                                        defaultValue={voter.phone}
+                                        defaultValue={admin.phone}
                                         name='phone'
                                         required
                                         onChange={e => handleChange(e)} />
@@ -110,7 +110,7 @@ return(
                                     className="bg-slate-200 border-black p-1" 
                                     type="email" 
                                     placeholder='example@gmail.com'
-                                    defaultValue={voter.email}
+                                    defaultValue={admin.email}
                                     name='email'
                                     onChange={e => handleChange(e)} />
                             </div>
@@ -142,7 +142,7 @@ return(
                                
                                 <button 
                                     className='px-5 py-1 rounded-l rounded-r-3xl bg-slate-400 hover:bg-slate-500'>
-                                    <Link to={'/admin'}>
+                                    <Link to={'/superAdmin'}>
                                         CANCEL
                                     </Link>
                                 </button>

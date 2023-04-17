@@ -16,7 +16,7 @@ return(
                     </Link>
                 </li>
                 <li className="border-2 p-2 hover:bg-sky-600">
-                    <Link to={'/admin/signup'}>
+                    <Link to={'/admin/signupVoter'}>
                         <h1>Add Voter</h1>
                     </Link>
                 </li>

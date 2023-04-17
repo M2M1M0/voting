@@ -59,11 +59,13 @@ return(
                                             RESET
                                         </Link>
                                     </button>
-                                    <button className='px-5 py-1 rounded-l rounded-r-3xl bg-slate-400 hover:bg-slate-500'>
-                                        <Link to={'/superAdmin'}>
+                                    <Link 
+                                        className='px-5 py-1 rounded-l rounded-r-3xl bg-slate-400 hover:bg-slate-500'
+                                        to={'/superAdmin'}>
+                                        <button >
                                             CANCEL
-                                        </Link>
-                                    </button>
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                                

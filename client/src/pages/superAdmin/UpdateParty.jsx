@@ -1,40 +1,43 @@
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from 'axios'
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import Menu from "./components/Menu";
 
-const initialState = {
-    partyname : "",
-    repname : "",
-    logo : "",
-    slogan : "",
-    station : "",
-}
+export default function UpdateParty(){
 
-export default function SignupParty(){
-    const [ party, setParty ] = useState(initialState)
+    const [ party, setParty ] = useState([])
     const [ error, setError ] = useState(false)
     const [ success, setSuccess ] = useState(false)
+    const { id } = useParams()
 
+    console.log(party,"before")
     const handleChange = (e) => {
         setParty({...party, [e.target.name] : e.target.value})
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(party, "party")
         try{
-            await axios.post("http://localhost:8800/signupParty", party)
-                .then(res => {
-                    console.log(res)
-                    setSuccess("Successfully Register")
-            })
+            await axios.put("http://localhost:8800/updateParty/" + id, party)
+                .then( () =>  setSuccess("Update Success"))
         } catch(err){
             console.log(err)
             setError(err.message)
         }    
-           
+
+    console.log(party,"after")
+
     }
+    useEffect(() => {
+        axios.get("http://localhost:8800/party/"+id)
+            .then(response => {
+                setParty(response.data[0])
+            })
+            .catch(error => {
+                setError(error.message)
+                console.log(error.message)
+            })
+    }, [id])
 
 return(
     <>
@@ -45,12 +48,16 @@ return(
         <div className="pl-2 w-4/5">
             <div className="flex flex-col h-screen">
                 <div className="h-16 w-full flex flex-col text-center bg-gray-950 text-white">
-                    <h1 className='font-semibold text-base sm:text-2xl'>Register Now</h1>
-                    <p className=''>National election board of ethiopia</p>
+                    <h1 className='font-semibold text-base sm:text-2xl'>Update Party</h1>
+                    <p className=''>National Election Board of Ethiopia</p>
                 </div>
-                <div className="px-3 pb-4 pt-2 sm:px-16 sm:py-8 overflow-scroll" >
-                    <div className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
-                        <div className='space-y-4'>
+                <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
+                
+                    <div className="text-center mb-8 text-2xl">
+                        {/* <span className="p-3">Username: </span>  {admin.username} */}
+                    </div>
+                    <hr />
+                    <div className='space-y-4'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
                                 <label htmlFor="">Party Name <span className='text-red-500 text-3xl'>*</span></label>
                                 <input 
@@ -135,24 +142,19 @@ return(
                                     className='px-5 py-1 rounded-l-3xl rounded-r bg-green-700 hover:bg-green-600 text-white'
                                     onClick={e => handleSubmit(e)}>
                                     <Link >
-                                        SUBMIT
+                                        Update
                                     </Link>
                                 </button>
-                                <button className='px-5 py-1 rounded-l rounded-r hover:border-2'>
-                                    <Link to={'/'}>
-                                        RESET
-                                    </Link>
-                                </button>
-                                <Link 
-                                    className='px-5 py-1 rounded-l rounded-r-3xl bg-slate-400 hover:bg-slate-500'
+                                <Link
+                                    className='px-5 py-1 rounded-l rounded-r-3xl bg-slate-400 hover:bg-slate-500' 
                                     to={'/superAdmin'}>
                                     <button >
                                             CANCEL
                                     </button>
                                 </Link>
+
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -57,7 +57,7 @@ return(
                     <div className="text-center ">
                         <div className="space-y-16 space-x-24">
                             <button className="px-3 py-2 rounded border-2 border-gray-400 hover:bg-gray-500 hover:text-white">
-                                <Link to={'/admin/signup'}>
+                                <Link to={'/admin/signupVoter'}>
                                     ADD VOTERS
                                 </Link>        
                             </button>
