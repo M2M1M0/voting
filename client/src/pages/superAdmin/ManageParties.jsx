@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import  { MdSearch } from 'react-icons/md'
 import  { RxUpdate } from 'react-icons/rx'
 import  { MdDelete } from 'react-icons/md'
+import  { AiOutlineFolderView } from 'react-icons/ai'
 
 
 export default function ManageParties(){
@@ -54,7 +55,7 @@ return(
                                 type="text" 
                                 placeholder=" Search.."/>  
 
-                            <button className=" px-2 rounded-r-2xl bg-slate-950 text-white ">
+                            <button className=" px-2 rounded-r-2xl bg-slate-950 text-white hover:bg-slate-700 ">
                                 <MdSearch className="text-4xl"/>
                             </button> 
                         </div>
@@ -98,6 +99,12 @@ return(
                                 </td>
                                 <td>{party.station}</td>
                                 <td className="flex text-base space-x-6 mt-2">
+                                    <Link to={'/superAdmin/manageSingleParty/'+ party._id}>
+                                        <div className="rounded-3xl px-3 py-1 text-white font-bold bg-sky-500 hover:bg-sky-300">
+                                            <AiOutlineFolderView className="text-2xl" />
+                                        </div>
+
+                                    </Link>
                                     <Link to={`/superAdmin/updateParty/${party._id}`}>
                                         <div className="rounded-3xl px-3 py-1 text-white font-bold bg-amber-600 hover:bg-amber-400 cursor-pointer">
                                             <RxUpdate className="text-2xl"/>

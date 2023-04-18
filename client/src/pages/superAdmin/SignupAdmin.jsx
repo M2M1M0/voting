@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import Menu from "./components/Menu";
@@ -33,7 +33,6 @@ export default function SignupAdmin(){
         try{
             await axios.post("http://localhost:8800/signupAdmin", admin)
                 .then(res => {
-                    console.log(res)
                     setSuccess("Successfully Register")
             })
         } catch(err){
@@ -42,6 +41,10 @@ export default function SignupAdmin(){
         }    
            
     }
+    const reset = () => {
+        setAdmin(initialState)
+    }
+
 
 
 return(
@@ -58,7 +61,6 @@ return(
                 </div>
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
                 
-                    {console.log(admin)}
                     <div 
                         className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-1 md:grid-cols-2">
                         <div className='space-y-2'>
@@ -226,6 +228,7 @@ return(
                                         SUBMIT
                                 </button>
                                 <button 
+                                    onClick={(e) => reset(e)}
                                     className='px-5 py-1 rounded-l rounded-r hover:border-2'>
                                         RESET
                                 </button>

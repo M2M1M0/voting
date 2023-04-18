@@ -32,6 +32,7 @@ import Home from "./pages/voter/Home";
 import VoteProfile from "./pages/voter/VoteProfile";
 import CastVote from "./pages/voter/CastVote";
 import UpdateParty from "./pages/superAdmin/UpdateParty";
+import ManageSingleParty from "./pages/superAdmin/ManageSingleParty";
 
 const router = createBrowserRouter([
 
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: "manageAdmins",
         element: <ManageAdmins />
+      },
+      {
+        path: "manageSingleParty/:id",
+        element: <ManageSingleParty />
       },
       {
         path: "manageParties",
