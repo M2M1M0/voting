@@ -2,12 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Menu from "./components/Menu";
+import { TiUserDelete } from 'react-icons/ti'
 
 function ManageSingleParty() {
 
     const [ party, setParty ] = useState([])
     const { id } = useParams()
 
+    const handleDelete = () => {
+        if(window.confirm("Are you sure deleting this station!")){
+
+        }
+    }
     useEffect(() => {
         axios.get("http://localhost:8800/party/"+id)
             .then(response => {
@@ -43,9 +49,21 @@ return (
         </div>
         <div className="text-3xl font-semibold">
             <h1>Participate in:</h1>
-
-            <ul>
-                <li></li>
+            <ul className="ml-10 mt-3 font-normal text-base ">
+                <li className="flex justify-between w-64 border-2 pl-5 p-1" >
+                    <div>{party.station}</div>
+                    <div onClick={() => handleDelete()}
+                        className="rounded-3xl px-3 py-1 text-white font-bold bg- bg-red-800 hover:bg-red-500 cursor-pointer"  >
+                        <TiUserDelete className="text-2xl" />
+                    </div>
+                </li>
+                <li className="flex justify-between w-64 border-2 pl-5 p-1" >
+                    <div>{party.station}</div>
+                    <div onClick={() => handleDelete()}
+                        className="rounded-3xl px-3 py-1 text-white font-bold bg- bg-red-800 hover:bg-red-500 cursor-pointer"  >
+                        <TiUserDelete className="text-2xl" />
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

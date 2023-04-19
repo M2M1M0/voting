@@ -1,15 +1,9 @@
 require("dotenv").config()
 const express = require('express')
 const cors = require('cors')
-const mysql = require('mysql')
 const { genSaltSync, hashSync } = require('bcryptjs')
+const db = require('./db')
 
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "Voting"
-})
 
 // Init app
 const app = express()
@@ -22,6 +16,37 @@ app.use(cors())
 app.get('/', (req, res) => {
     res.send('Hello fom backend')
 })
+
+/************ Admin ***************/
+// Register Station
+app.post('/regStation', (req, res) => {
+    const {
+        stationname,
+        admin
+    } = req.body
+
+    /// send user info to database
+    const query = "INSERT INTO stations(stationname, admin) VALUES(?,?)"
+    const data = [
+        stationname,
+        admin
+    ]
+    db.query(query, [...data], (err, data) => {
+        if (err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+// Get All Stations Data
+app.get("/stations", (req, res) => {
+    const query = "SELECT * FROM stations"
+    db.query(query, (err, data) => {
+        if (err) return res.json(err)
+        res.json(data)
+    })
+})
+
+
 
 
 
@@ -145,7 +170,7 @@ app.delete("/admin/:id", (req, res) => {
 
 
 /************ Party ***************/
-// Register Party
+// Register a Party
 app.post('/signupParty', (req, res) => {
     const {
         partyname,
@@ -194,7 +219,7 @@ app.get('/party/:id', (req, res) => {
     })
 })
 
-// Delete Party
+// Delete a Party
 app.delete("/party/:id", (req, res) => {
     const id = req.params.id
     const query = "DELETE FROM parties WHERE _id = ?"
@@ -204,7 +229,7 @@ app.delete("/party/:id", (req, res) => {
     })
 })
 
-// Update Admin
+// Update Party
 app.put('/updateParty/:id', (req, res) => {
 
     const { id } = req.params
@@ -293,7 +318,7 @@ app.post('/signupVoter', (req, res) => {
     })
 })
 
-// Get All Admins Data
+// Get All Voters Data
 app.get("/voters", (req, res) => {
     const query = "SELECT * FROM users WHERE userRole = 'voter' "
     db.query(query, (err, data) => {

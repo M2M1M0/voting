@@ -85,6 +85,11 @@ return(
                                 <th className="pl-8" scope="col">Actions</th>
                             </tr>
                         </thead>
+                        {error && 
+                        <div className="bg-red-300 text-red-900 text-1xl p-3 m-2 w-full">
+                            {error}
+                        </div>
+                        }
                         <tbody>
                             {admin && admin.map((user, index) => (
                             <tr className="border" key={user._id}>
@@ -111,11 +116,7 @@ return(
                         </tbody>
                         
                     </table>
-                    {error && 
-                    <div className="bg-red-300 text-red-900 text-1xl p-3 m-2 w-full">
-                        {error}
-                    </div>
-                    }
+                    
 
                 </div>
                 </div>

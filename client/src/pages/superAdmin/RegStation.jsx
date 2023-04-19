@@ -1,7 +1,29 @@
+import { useState } from "react";
+import axios from 'axios'
 import { Link } from "react-router-dom";
 import Menu from "./components/Menu";
 
 export default function RegStation(){
+
+    const [ station, setStation ] = useState([])
+    const [ error, setError ] = useState(false)
+    const [ success, setSuccess ] = useState(false)
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setStation({...station, [name] : value})
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        axios.post("http://localhost:8800/regStation", station)
+            .then(res => setSuccess("Successfully Added"))
+            .catch(err => {
+                setError(err.message)
+                console.log(err)
+            })
+    }
+
 
 return(
     <>
@@ -24,38 +46,39 @@ return(
                                     <input 
                                         className="bg-slate-200 border-black p-1" 
                                         type="text"
-                                        name='stationName'
-                                        value={''}
-                                        onChange={''} />
+                                        name='stationname'
+                                        defaultValue={station.stationname}
+                                        onChange={(e) => handleChange(e)} />
                                 </div>
                                 <div className='flex flex-col gap-2  text-black pr-24'>
-                                    <label htmlFor="">Address Name <span className='text-red-500 text-3xl'>*</span></label>
+                                    <label htmlFor="">Admin Username <span className='text-red-500 text-3xl'>*</span></label>
                                     <input 
                                         className="bg-slate-200 border-black p-1" 
                                         type="text"
-                                        name='midname'
-                                        value={''}
-                                        onChange={''} />
-                                </div>
-                                <div className='flex flex-col gap-2 text-black pr-24'>
-                                    <label htmlFor=""> </label>
-                                    <textarea 
-                                        className="p-1 bg-slate-200"
-                                        name='description'
-                                        value={''}
-                                        onChange={''}  > 
-                                    </textarea> 
+                                        name='admin'
+                                        defaultValue={station.admin}
+                                        onChange={(e) => handleChange(e)} />
                                 </div>
                                 
+                                {
+                                    error &&
+                                    <div className="bg-red-300 text-red-700 text-base p-2">{error}</div>
+                                }
+                                {
+                                    success &&
+                                    <div className="bg-emerald-300 text-emerald-700 text-base p-2">{success}</div>
+                                }
                                 
                                 <div className='flex flex-row text-center gap-1 sm:gap-3  text-black  py-5'>
-                                    <button className='px-5 py-1 rounded-l-3xl rounded-r bg-green-700 hover:bg-green-600 text-white'>
-                                        <Link to={'/'}>
+                                    <button 
+                                        onClick={(e) => handleSubmit(e)}
+                                        className='px-5 py-1 rounded-l-3xl rounded-r bg-green-700 hover:bg-green-600 text-white'>
+                                        <Link>
                                             SUBMIT
                                         </Link>
                                     </button>
                                     <button className='px-5 py-1 rounded-l rounded-r  bg-slate-200 hover:bg-slate-300'>
-                                        <Link to={'/'}>
+                                        <Link >
                                             RESET
                                         </Link>
                                     </button>
