@@ -17,7 +17,7 @@ export default function UpdateAdmin(){
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{
-            await axios.put("http://localhost:8800/updateVoter/" + id, voter)
+            await axios.put("http://localhost:8800/voter/" + id, voter)
                 .then(res => {
                     setSuccess("Update Success")
             })
@@ -25,6 +25,11 @@ export default function UpdateAdmin(){
             console.log(err)
             setError(err.message)
         }    
+
+        setTimeout(() => {
+            setSuccess(false)
+            setError(false)
+        }, 3000)
     }
 
     useEffect(() => {
@@ -121,13 +126,13 @@ return(
                                     onChange={e => handleChange(e)}/>
                             </div>
                             {error && 
-                            <div className="bg-red-300 text-red-900 text-1xl p-3 mx-16 w-2/5">
+                            <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-3/4">
                                 {error}
                             </div>
 
                             }
                             {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-xl p-3 mx-16 w-2/5">
+                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-3/4">
                                 {success}
                             </div>
 

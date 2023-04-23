@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "online voting system for National Election Board of Ethiopia",
     "main": "app.js",
+    "type": "module",
     "scripts": {
         "start": "nodemon"
     },

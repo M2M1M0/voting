@@ -35,7 +35,6 @@ return(
                                 </div>
                             </div>
                             <div className="pl-2 pt-3 flex flex-col bg-stone-500 hover:bg-stone-400">
-                                {/* <FontAwesomeIcon icon={img} /> */}
                                 <div>
                                     <h2>3</h2>
                                 </div>

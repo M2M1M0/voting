@@ -17,17 +17,23 @@ export default function UpdateAdmin(){
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{
-            await axios.put("http://localhost:8800/updateParty/" + id, admin)
-                .then(res => {
+            // Update Admin Info
+            await axios.put("http://localhost:8800/admin/" + id, admin)
+                .then(() => {
                     setSuccess("Update Success")
-            })
+            }).catch(err => setError(err.message))
         } catch(err){
             console.log(err)
             setError(err.message)
-        }    
+        } 
+        setTimeout(() => {
+            setSuccess(false)
+            setError(false)
+        }, 3000)   
     }
 
     useEffect(() => {
+        // Get A single Admin
         axios.get("http://localhost:8800/admin/"+id)
             .then(response => {
                 setAdmin(response.data[0])
@@ -114,20 +120,20 @@ return(
                                     name='email'
                                     onChange={e => handleChange(e)} />
                             </div>
-                            <div>
+                            {/* <div>
                                 <input 
                                     type="hidden" 
                                     name="userRole"
                                     onChange={e => handleChange(e)}/>
-                            </div>
+                            </div> */}
                             {error && 
-                            <div className="bg-red-300 text-red-900 text-1xl p-3 mx-16 w-2/5">
+                            <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-3/4">
                                 {error}
                             </div>
 
                             }
                             {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-xl p-3 mx-16 w-2/5">
+                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-3/4">
                                 {success}
                             </div>
 

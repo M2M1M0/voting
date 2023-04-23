@@ -4,35 +4,37 @@ import {
   } from "react-router-dom"
 
 // Admin Pages
-import Approval from "./pages/admin/Approval";
-import AdminDashboard from "./pages/admin/Dashboard";
-import ManageVoter from "./pages/admin/ManageVoter";
-import Report from "./pages/admin/Report";
-import SignupVoter from "./pages/admin/SignupVoter";
-import UpdateVoter from "./pages/admin/UpdateVoter";
+import Approval from "./views/admin/Approval";
+import AdminDashboard from "./views/admin/Dashboard";
+import ManageVoter from "./views/admin/ManageVoter";
+import Report from "./views/admin/Report";
+import SignupVoter from "./views/admin/SignupVoter";
+import UpdateVoter from "./views/admin/UpdateVoter";
 
 // SuperAdmin Pages 
-import SuperAdminDashboard from "./pages/superAdmin/Dashboard";
-import ManageAdmins from "./pages/superAdmin/ManageAdmins";
-import ManageParties from "./pages/superAdmin/ManageParties";
-import SignupAdmin from "./pages/superAdmin/SignupAdmin";
-import SignupParty from "./pages/superAdmin/SignupParty";
-import Approvals from "./pages/superAdmin/Approval";
-import Reports from "./pages/superAdmin/Report";
-import RegStation from "./pages/superAdmin/RegStation";
-import UpdateAdmin from "./pages/superAdmin/UpdateAdmin";
+import SuperAdminDashboard from "./views/superAdmin/Dashboard";
+import ManageAdmins from "./views/superAdmin/ManageAdmins";
+import ManageParties from "./views/superAdmin/ManageParties";
+import SignupAdmin from "./views/superAdmin/SignupAdmin";
+import SignupParty from "./views/superAdmin/SignupParty";
+import Approvals from "./views/superAdmin/Approval";
+import Reports from "./views/superAdmin/Report";
+import RegStation from "./views/superAdmin/RegStation";
+import UpdateAdmin from "./views/superAdmin/UpdateAdmin";
 
 
 // Index Pages
-import Login from "./pages/Login";
-import ForgetPassword from "./pages/ForgetPassword";
+import Login from "./views/Login";
+import ForgetPassword from "./views/ForgetPassword";
 
 // Voter Pages
-import Home from "./pages/voter/Home";
-import VoteProfile from "./pages/voter/VoteProfile";
-import CastVote from "./pages/voter/CastVote";
-import UpdateParty from "./pages/superAdmin/UpdateParty";
-import ManageSingleParty from "./pages/superAdmin/ManageSingleParty";
+import Home from "./views/voter/Home";
+import VoteProfile from "./views/voter/VoteProfile";
+import CastVote from "./views/voter/CastVote";
+import UpdateParty from "./views/superAdmin/UpdateParty";
+import ManageSingleParty from "./views/superAdmin/ManageSingleParty";
+import ManageStations from "./views/superAdmin/ManageStations";
+import UpdateStation from "./views/superAdmin/UpdateStation";
 
 const router = createBrowserRouter([
 
@@ -125,6 +127,14 @@ const router = createBrowserRouter([
       {
         path: "manageParties",
         element: <ManageParties />
+      },
+      {
+        path: "manageStations",
+        element: <ManageStations />
+      },
+      {
+        path: "updateStation/:id",
+        element: <UpdateStation />
       },
       {
         path: "approval",

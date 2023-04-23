@@ -26,6 +26,11 @@ return(
                     </Link>
                 </li>
                 <li className="border-2 p-2 hover:bg-emerald-500">
+                    <Link to={'/superAdmin/manageStations'}>   
+                        <h1>Manage Stations</h1>
+                    </Link>
+                </li>
+                <li className="border-2 p-2 hover:bg-emerald-500">
                     <Link to={'/superAdmin/approval'}>
                         <h1>Activate/ Diactivate</h1>
                     </Link>

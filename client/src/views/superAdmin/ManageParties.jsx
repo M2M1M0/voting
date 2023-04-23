@@ -11,23 +11,39 @@ import  { AiOutlineFolderView } from 'react-icons/ai'
 export default function ManageParties(){
 
     const [ party, setParty ] = useState([])
+    const [ searchkey, setSearch ] = useState([])
+
     const [ error, setError ] = useState(false)
 
-    console.log(party)
+    // console.log(party)
+    const search = (key) => {
+        // Search 
+        axios.get("http://localhost:8800/party/search/"+key)
+            .then(response => {
+                console.log(response.data[0], "result") 
+            })
+            .catch(error => {
+                setError(error.message)
+                console.log(error.message)
+            })
+    }
 
     const handleDelete = (id) => {
         if(window.confirm("Are you sure! you want to delete this Party?")){
+            // Remove party
             axios.delete(`http://localhost:8800/party/${id}`)
             .then(() => console.log("Delete success"))
-            .then(data => setParty(data))
+            // .then(data => setParty(data))
             .catch(err => setError(err.message))
         }
         
     }
+
     useEffect(() => {
-        axios.get("http://localhost:8800/parties")
+        // Get All Parties
+        axios.get("http://localhost:8800/party")
             .then(response => {
-                console.log(response.data) 
+                // console.log(response.data) 
                 setParty(response.data)
             })
             .catch(error => {
@@ -53,10 +69,14 @@ return(
                             <input
                                 className="pl-5 border-sky-700 bg-white w-72 hover:bg-slate-300" 
                                 type="text" 
+                                name="key"
+                                onChange={(e) => setSearch(e.target.value)}
                                 placeholder=" Search.."/>  
 
                             <button className=" px-2 rounded-r-2xl bg-slate-950 text-white hover:bg-slate-700 ">
-                                <MdSearch className="text-4xl"/>
+                                <MdSearch 
+                                    onClick={() => search(searchkey)}
+                                    className="text-4xl"/>
                             </button> 
                         </div>
                          
@@ -83,12 +103,11 @@ return(
                                 <th scope="col">Party Name</th>
                                 <th scope="col">Representative</th>
                                 <th scope="col">Logo</th>
-                                <th scope="col">Station</th>
                                 <th className="pl-8" scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {party && party.map((party, index) => (
+                            {party.length ? party.map((party, index) => (
                             <tr className="border" key={party._id}>
                                 <td className="p-3 ">{index + 1}</td>
                                 <td className="font-extrabold">{party.partyname} </td>
@@ -97,13 +116,11 @@ return(
                                     className="w-16 h-16"
                                     src={party.phone} alt="" />
                                 </td>
-                                <td>{party.station}</td>
                                 <td className="flex text-base space-x-6 mt-2">
                                     <Link to={'/superAdmin/manageSingleParty/'+ party._id}>
                                         <div className="rounded-3xl px-3 py-1 text-white font-bold bg-sky-500 hover:bg-sky-300">
                                             <AiOutlineFolderView className="text-2xl" />
                                         </div>
-
                                     </Link>
                                     <Link to={`/superAdmin/updateParty/${party._id}`}>
                                         <div className="rounded-3xl px-3 py-1 text-white font-bold bg-amber-600 hover:bg-amber-400 cursor-pointer">
@@ -117,12 +134,11 @@ return(
                                     </div>
                                 </td>
                             </tr>
-                            ))}
+                            )) : null }
                         </tbody>
-                        
                     </table>
                     {error && 
-                    <div className="bg-red-300 text-red-900 text-1xl p-3 m-2 w-full">
+                    <div className="grid grid-cols-2 bg-red-300 text-red-900 text-1xl p-3 m-2 w-full">
                         {error}
                     </div>
                     }

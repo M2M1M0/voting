@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import Menu from "./components/Menu";
@@ -21,6 +21,8 @@ const initialState = {
 export default function SignupAdmin(){
 
     const [ admin, setAdmin ] = useState(initialState)
+    const [ stations, setStations ] = useState([])
+
     const [ error, setError ] = useState(false)
     const [ success, setSuccess ] = useState(false)
 
@@ -31,20 +33,28 @@ export default function SignupAdmin(){
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{
-            await axios.post("http://localhost:8800/signupAdmin", admin)
-                .then(res => {
+            // Register Admin
+            await axios.post("http://localhost:8800/admin/signup", admin)
+                .then(() => {
                     setSuccess("Successfully Register")
             })
         } catch(err){
             console.log(err)
             setError(err.message)
         }    
-           
+        setTimeout(() => {
+            setSuccess(false)
+            setError(false)
+        }, 3000)
     }
-    const reset = () => {
-        setAdmin(initialState)
-    }
+    
 
+    useEffect(() => {
+        // Get all stations
+        axios.get("http://localhost:8800/station")
+            .then(res => { setStations(res.data)})
+            .catch(err => { setError(err.message)})
+    }, [])
 
 
 return(
@@ -60,7 +70,7 @@ return(
                     <p className=''>National election board of ethiopia</p>
                 </div>
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
-                
+                <form>
                     <div 
                         className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-1 md:grid-cols-2">
                         <div className='space-y-2'>
@@ -125,19 +135,15 @@ return(
                                         required
                                         className="bg-slate-200"
                                         onChange={e => handleChange(e)}>
-
                                         <option value="0" ></option>
-                                        <option value="Addis Ketema">Addis Ketema</option>
-                                        <option value="Akaki Kaliti">Akaki Kaliti</option>
-                                        <option value="Arada">Arada</option>
-                                        <option value="Bole">Bole</option>
-                                        <option value="Gullele">Gullele</option>
-                                        <option value="Kirkos">Kirkos</option>
-                                        <option value="Kolfe Keranio">Kolfe Keranio</option>
-                                        <option value="Lideta">Lideta</option>
-                                        <option value="Nifas Silk-Lafto">Nifas Silk-Lafto</option>
-                                        <option value="Yeka">Yeka</option>
-                                        <option value="Lemi Kura">Lemi Kura</option>
+                                   { stations.length ? stations.map((station, index) => (
+                                        <option 
+                                            key={index}
+                                            value={station.stationname}>
+                                                {station.stationname}
+                                        </option>
+                                    )) : null}
+                                    
                                     </select>
                             </div>
                         </div>
@@ -209,13 +215,13 @@ return(
                                     onChange={e => handleChange(e)}/>
                             </div>
                             {error && 
-                            <div className="bg-red-300 text-red-900 text-1xl p-3 mx-16 w-2/5">
+                            <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-3/4">
                                 {error}
                             </div>
 
                             }
                             {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-2xl p-3 mx-16 w-2/5">
+                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-3/4">
                                 {success}
                             </div>
 
@@ -228,7 +234,7 @@ return(
                                         SUBMIT
                                 </button>
                                 <button 
-                                    onClick={(e) => reset(e)}
+                                    onClick={() => setAdmin(null)}
                                     className='px-5 py-1 rounded-l rounded-r hover:border-2'>
                                         RESET
                                 </button>
@@ -244,6 +250,8 @@ return(
                             </div>
                         </div>
                     </div>
+                </form>
+
                 </div>
             </div>
         </div>

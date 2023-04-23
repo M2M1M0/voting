@@ -10,7 +10,7 @@ export default function UpdateParty(){
     const [ success, setSuccess ] = useState(false)
     const { id } = useParams()
 
-    console.log(party,"before")
+    // console.log(party,"before")
     const handleChange = (e) => {
         setParty({...party, [e.target.name] : e.target.value})
     }
@@ -18,17 +18,22 @@ export default function UpdateParty(){
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{
-            await axios.put("http://localhost:8800/updateParty/" + id, party)
+            // Update Party Info
+            await axios.put("http://localhost:8800/party/" + id, party)
                 .then( () =>  setSuccess("Update Success"))
         } catch(err){
             console.log(err)
             setError(err.message)
         }    
-
-    console.log(party,"after")
+        setTimeout(() => {
+            setSuccess(false)
+            setError(false)
+        }, 3000)
+    // console.log(party,"after")
 
     }
     useEffect(() => {
+        // Get a Single Party
         axios.get("http://localhost:8800/party/"+id)
             .then(response => {
                 setParty(response.data[0])
@@ -100,28 +105,6 @@ return(
                                     defaultValue={party.slogan}
                                     onChange={(e) => handleChange(e)}  > 
                                 </textarea> 
-                            </div>
-                            <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Station Name<span className='text-red-500 text-3xl'>*</span></label>
-                                    <select 
-                                        defaultValue={party.station}
-                                        onChange={(e) => handleChange(e)}
-                                        name="station" id="" 
-                                        required
-                                        className="bg-slate-200">
-                                        <option value="0" ></option>
-                                        <option value="Addis Ketema">Addis Ketema</option>
-                                        <option value="Akaki Kaliti">Akaki Kaliti</option>
-                                        <option value="Arada">Arada</option>
-                                        <option value="Bole">Bole</option>
-                                        <option value="Gullele">Gullele</option>
-                                        <option value="Kirkos">Kirkos</option>
-                                        <option value="Kolfe Keranio">Kolfe Keranio</option>
-                                        <option value="Lideta">Lideta</option>
-                                        <option value="Nifas Silk-Lafto">Nifas Silk-Lafto</option>
-                                        <option value="Yeka">Yeka</option>
-                                        <option value="Lemi Kura">Lemi Kura</option>
-                                    </select>
                             </div>
                             
                             {error && 

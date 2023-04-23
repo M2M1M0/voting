@@ -16,14 +16,20 @@ export default function RegStation(){
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post("http://localhost:8800/regStation", station)
-            .then(res => setSuccess("Successfully Added"))
+        // Register Signup
+        axios.post("http://localhost:8800/station/signup", station)
+            .then(() => setSuccess("Successfully Added"))
             .catch(err => {
                 setError(err.message)
                 console.log(err)
             })
+        setTimeout(() => {
+            setSuccess(false)
+            setSuccess(false)
+        }, 3000)
     }
 
+   
 
 return(
     <>
@@ -59,7 +65,18 @@ return(
                                         defaultValue={station.admin}
                                         onChange={(e) => handleChange(e)} />
                                 </div>
-                                
+                                <div className='flex flex-col gap-2  text-black pr-24'>
+                                    <label htmlFor="">Contact Number <span className='text-red-500 text-3xl'>*</span></label>
+                                    <input 
+                                        className="bg-slate-200 border-black p-1" 
+                                        type="text"
+                                        name='contact'
+                                        placeholder='+251..'
+                                        maxLength={10}
+                                        minLength={10}
+                                        defaultValue={station.contact}
+                                        onChange={(e) => handleChange(e)} />
+                                </div>
                                 {
                                     error &&
                                     <div className="bg-red-300 text-red-700 text-base p-2">{error}</div>
@@ -91,7 +108,6 @@ return(
                                     </Link>
                                 </div>
                             </div>
-                               
                         </div>
                     </form>
                 </div>

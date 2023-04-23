@@ -10,21 +10,39 @@ import  { TiUserDelete } from 'react-icons/ti'
 export default function ManageAdmins(){
 
     const [ admin, setAdmin ] = useState([])
+    const [ searchkey, setSearch ] = useState([])
+    
     const [ error, setError ] = useState(false)
 
     const handleDelete = (id) => {
         if(window.confirm("Are you sure! you want to delete this Admin?")){
+            // Remove admin
             axios.delete(`http://localhost:8800/admin/${id}`)
             .then(() => console.log("Delete success"))
-            .then(data => setAdmin(data))
+            // .then(data => console.log(data, "res"))
             .catch(err => setError(err.message))
         }
         
     }
-    useEffect(() => {
-        axios.get("http://localhost:8800/admins")
+
+    const search = (key) => {
+        // Search Admin &/ admins
+        axios.get("http://localhost:8800/admin/search/"+key)
             .then(response => {
-                console.log(response.data) 
+                console.log(response.data[0], "result") 
+                // setAdmin(response.data[0])
+            })
+            .catch(error => {
+                setError(error.message)
+                console.log(error.message)
+            })
+    }
+
+    useEffect(() => {
+        // Get all Admins
+        axios.get("http://localhost:8800/admin")
+            .then(response => {
+                // console.log(response.data) 
                 setAdmin(response.data)
             })
             .catch(error => {
@@ -50,10 +68,14 @@ return(
                             <input
                                 className="pl-5 border-sky-700 bg-white w-72 hover:bg-slate-300" 
                                 type="text" 
+                                name="key"
+                                onChange={e => setSearch(e.target.value)}
                                 placeholder=" Search by Username/Phone"/>  
 
                             <button className=" px-2 rounded-r-2xl bg-slate-950 text-white ">
-                                <MdPersonSearch className="text-4xl"/>
+                                <MdPersonSearch 
+                                    onClick={() => search(searchkey)}
+                                    className="text-4xl"/>
                             </button> 
                         </div>
                          
@@ -85,13 +107,10 @@ return(
                                 <th className="pl-8" scope="col">Actions</th>
                             </tr>
                         </thead>
-                        {error && 
-                        <div className="bg-red-300 text-red-900 text-1xl p-3 m-2 w-full">
-                            {error}
-                        </div>
-                        }
+                        
                         <tbody>
-                            {admin && admin.map((user, index) => (
+                            
+                            {admin.length ? admin.map((user, index) => (
                             <tr className="border" key={user._id}>
                                  <td className="p-3 ">{index + 1}</td>
                                 <td className="font-mono ">{user.fname}  {user.midname}  {user.lname}</td>
@@ -112,12 +131,15 @@ return(
                                     </div>
                                 </td>
                             </tr>
-                            ))}
+                            )) : null }
                         </tbody>
                         
                     </table>
-                    
-
+                    {error && 
+                    <div className="bg-red-300 text-red-900 text-1xl p-3 m-2 w-full">
+                        {error}
+                    </div>
+                    }
                 </div>
                 </div>
             </div>

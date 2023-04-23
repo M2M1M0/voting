@@ -10,22 +10,38 @@ import  { TiUserDelete } from 'react-icons/ti'
 export default function ManageAdmins(){
 
     const [ voter, setVoter ] = useState([])
+    const [ searchkey, setSearch ] = useState([])
     const [ error, setError ] = useState(false)
 
     const handleDelete = (id) => {
         if(window.confirm("Are you sure! you want to delete this Voter?")){
             axios.delete(`http://localhost:8800/voter/${id}`)
                 .then(() => console.log("Delete success"))
-                .then(data => setVoter(data))
+                // .then(data => setVoter(data))
                 .catch(err => setError(err.message))
         }
+        setTimeout(() => {
+            setError(false)
+        }, 3000)
         
     }
 
-    useEffect(() => {
-        axios.get("http://localhost:8800/voters")
+    const search = (key) => {
+        // Search 
+        axios.get("http://localhost:8800/voter/search/"+key)
             .then(response => {
-                console.log(response.data) 
+                console.log(response.data[0], "result") 
+            })
+            .catch(error => {
+                setError(error.message)
+                console.log(error.message)
+            })
+    }
+
+    useEffect(() => {
+        axios.get("http://localhost:8800/voter")
+            .then(response => {
+                // console.log(response.data) 
                 setVoter(response.data)
             })
             .catch(error => {
@@ -51,10 +67,14 @@ return(
                             <input
                                 className="pl-5 border-sky-700 bg-white w-72 hover:bg-slate-300" 
                                 type="text" 
+                                name="key"
+                                onChange={e => setSearch(e.target.value)}
                                 placeholder=" Search by Username/Phone"/>  
 
                             <button className=" px-2 rounded-r-2xl bg-slate-950 text-white ">
-                                <MdPersonSearch className="text-4xl"/>
+                                <MdPersonSearch 
+                                    onClick={() => search(searchkey)}
+                                    className="text-4xl"/>
                             </button> 
                         </div>
                          

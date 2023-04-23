@@ -3,16 +3,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Menu from "./components/Menu";
 
-const initialState = {
-    partyname : "",
-    repname : "",
-    logo : "",
-    slogan : "",
-    station : "",
-}
 
 export default function SignupParty(){
-    const [ party, setParty ] = useState(initialState)
+    const [ party, setParty ] = useState([])
+
     const [ error, setError ] = useState(false)
     const [ success, setSuccess ] = useState(false)
 
@@ -20,20 +14,23 @@ export default function SignupParty(){
         setParty({...party, [e.target.name] : e.target.value})
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        console.log(party, "party")
-        try{
-            await axios.post("http://localhost:8800/signupParty", party)
-                .then(res => {
-                    console.log(res)
-                    setSuccess("Successfully Register")
-            })
-        } catch(err){
+    const handleSubmit = (e) => {
+    e.preventDefault()
+        // Register Party
+    axios.post("http://localhost:8800/party/signup", party)
+        .then(res => {
+            console.log(res, "response")
+            setSuccess("Successfully Register")
+        })
+        .catch(err => {
             console.log(err)
             setError(err.message)
-        }    
-           
+        })
+
+        setTimeout(() => {
+            setSuccess(false)
+            setError(false)
+        }, 3000)
     }
 
 return(
@@ -94,37 +91,16 @@ return(
                                     onChange={(e) => handleChange(e)}  > 
                                 </textarea> 
                             </div>
-                            <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Station Name<span className='text-red-500 text-3xl'>*</span></label>
-                                    <select 
-                                        defaultValue={party.station}
-                                        onChange={(e) => handleChange(e)}
-                                        name="station" id="" 
-                                        required
-                                        className="bg-slate-200">
-                                        <option value="0" ></option>
-                                        <option value="Addis Ketema">Addis Ketema</option>
-                                        <option value="Akaki Kaliti">Akaki Kaliti</option>
-                                        <option value="Arada">Arada</option>
-                                        <option value="Bole">Bole</option>
-                                        <option value="Gullele">Gullele</option>
-                                        <option value="Kirkos">Kirkos</option>
-                                        <option value="Kolfe Keranio">Kolfe Keranio</option>
-                                        <option value="Lideta">Lideta</option>
-                                        <option value="Nifas Silk-Lafto">Nifas Silk-Lafto</option>
-                                        <option value="Yeka">Yeka</option>
-                                        <option value="Lemi Kura">Lemi Kura</option>
-                                    </select>
-                            </div>
+                            
                             
                             {error && 
-                            <div className="bg-red-300 text-red-900 text-1xl p-3 mx-16 w-2/5">
+                            <div className="bg-red-300 text-red-900 text-base p-3 mx-16 ">
                                 {error}
                             </div>
 
                             }
                             {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-2xl p-3 mx-16 w-2/5">
+                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 mx-16 ">
                                 {success}
                             </div>
 
