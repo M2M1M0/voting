@@ -11,7 +11,9 @@ export default function ManageAdmins(){
 
     const [ admin, setAdmin ] = useState([])
     const [ searchkey, setSearch ] = useState([])
+    const [ find, setFind ] = useState([])
     
+
     const [ error, setError ] = useState(false)
 
     const handleDelete = (id) => {
@@ -30,7 +32,7 @@ export default function ManageAdmins(){
         axios.get("http://localhost:8800/admin/search/"+key)
             .then(response => {
                 console.log(response.data[0], "result") 
-                // setAdmin(response.data[0])
+                setFind(response.data[0])
             })
             .catch(error => {
                 setError(error.message)
@@ -109,29 +111,52 @@ return(
                         </thead>
                         
                         <tbody>
-                            
-                            {admin.length ? admin.map((user, index) => (
-                            <tr className="border" key={user._id}>
-                                 <td className="p-3 ">{index + 1}</td>
-                                <td className="font-mono ">{user.fname}  {user.midname}  {user.lname}</td>
-                                <td className="font-extrabold">{user.username}</td>
-                                <td>{user.phone}</td>
-                                <td>{user.email}</td>
-                                <td>{user.station}</td>
+                        {/* {console.log(find.length, "found")} */}
+                            { find.length ? 
+                            <tr className="border">
+                                <td className="p-3 ">{12}</td>
+                                <td className="font-mono ">{find.fname}  {find.midname}  {find.lname}</td>
+                                <td className="font-extrabold">{find.username}</td>
+                                <td>{find.phone}</td>
+                                <td>{find.email}</td>
+                                <td>{find.station}</td>
                                 <td className="flex text-base space-x-6 mt-2">
-                                    <Link to={`/superAdmin/updateAdmin/${user._id}`}>
+                                    <Link to={`/superAdmin/updateAdmin/${find._id}`}>
                                         <div className="rounded-3xl px-3 py-1 text-white font-bold bg-amber-600 hover:bg-amber-400 cursor-pointer">
                                             <RxUpdate className="text-2xl"/>
                                         </div>
                                     </Link>
 
-                                    <div onClick={() => handleDelete(user._id)}
+                                    <div onClick={() => handleDelete(find._id)}
                                         className="rounded-3xl px-3 py-1 text-white font-bold bg- bg-red-800 hover:bg-red-500 cursor-pointer"  >
                                         <TiUserDelete className="text-2xl" />
                                     </div>
                                 </td>
                             </tr>
-                            )) : null }
+                            : 
+                            admin.length ? admin.map((user, index) => (
+                                <tr className="border" key={user._id}>
+                                     <td className="p-3 ">{index + 1}</td>
+                                    <td className="font-mono ">{user.fname}  {user.midname}  {user.lname}</td>
+                                    <td className="font-extrabold">{user.username}</td>
+                                    <td>{user.phone}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.station}</td>
+                                    <td className="flex text-base space-x-6 mt-2">
+                                        <Link to={`/superAdmin/updateAdmin/${user._id}`}>
+                                            <div className="rounded-3xl px-3 py-1 text-white font-bold bg-amber-600 hover:bg-amber-400 cursor-pointer">
+                                                <RxUpdate className="text-2xl"/>
+                                            </div>
+                                        </Link>
+    
+                                        <div onClick={() => handleDelete(user._id)}
+                                            className="rounded-3xl px-3 py-1 text-white font-bold bg- bg-red-800 hover:bg-red-500 cursor-pointer"  >
+                                            <TiUserDelete className="text-2xl" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                )) : null
+                            }
                         </tbody>
                         
                     </table>

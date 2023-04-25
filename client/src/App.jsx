@@ -35,6 +35,8 @@ import UpdateParty from "./views/superAdmin/UpdateParty";
 import ManageSingleParty from "./views/superAdmin/ManageSingleParty";
 import ManageStations from "./views/superAdmin/ManageStations";
 import UpdateStation from "./views/superAdmin/UpdateStation";
+import VotesConfirmation from "./views/voter/VotesConfirmation";
+import { AuthContexProvider } from "./context/authContext";
 
 const router = createBrowserRouter([
 
@@ -58,9 +60,13 @@ const router = createBrowserRouter([
         element: <VoteProfile />
       },
       {
-        path: 'castVote',
+        path: 'castVote/:station',
         element: <CastVote />
       },
+      {
+        path: 'confirmation',
+        element: <VotesConfirmation />
+      }
     ]
   },
 
@@ -158,13 +164,11 @@ const router = createBrowserRouter([
 
 function App() {
     
-    return (
-        <div className="app">
-          <div className="container">
-            <RouterProvider router={router} />
-          </div>
-        </div>
-      );
+  return (
+    <AuthContexProvider>
+      <RouterProvider router={router} />
+    </AuthContexProvider>
+  )
 }
 
 export default App;

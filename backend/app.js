@@ -4,8 +4,11 @@ import cors from 'cors'
 
 // Import Routes
 import voterRouter from './router/voter.js'
+import voteRouter from './router/votes.js'
+
+import userAuthRouter from './router/auth.js'
 import adminRouter from './router/admin.js'
-import partyRouter from './router/party.js';
+import partyRouter from './router/party.js'
 import {
     stationRouter,
     participateRouter
@@ -27,9 +30,11 @@ app.get('/', (req, res) => {
 // Register Routes
 app.use("/voter", voterRouter)
 app.use("/admin", adminRouter)
+app.use("/auth", userAuthRouter)
 app.use("/party", partyRouter)
 app.use("/station", stationRouter)
 app.use("/participateIn", participateRouter)
+app.use("/vote", voteRouter)
 
 
 // Listening...        

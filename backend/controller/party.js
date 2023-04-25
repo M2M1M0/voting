@@ -1,7 +1,6 @@
 /************ Party ***************/
 import db from '../model/db.js'
-import pkg from 'bcryptjs'
-const { genSaltSync, hashSync } = pkg
+
 
 // Register a Party
 const signupParty = (req, res) => {
@@ -12,20 +11,33 @@ const signupParty = (req, res) => {
         slogan
     } = req.body
 
-    const query = "INSERT INTO parties(partyname, repname, logo, slogan) VALUES(?,?,?,?)"
+    //CHECK EXISTING Party
+    const query0 = "SELECT * FROM parties WHERE partyname = ?"
 
-    const data = [
-        partyname,
-        repname,
-        logo,
-        slogan
-    ]
+    db.query(query0, partyname, (err, data) => {
+        if (err) return res.status(500).json(err)
+        if (data.length) {
+            return res.status(409).json("Party Already exists!")
+        } else {
 
-    /// send user info to database
-    db.query(query, [...data], (err, data) => {
-        if (err) return res.json(err)
-        return res.json(data)
+            const query = "INSERT INTO parties(partyname, repname, logo, slogan) VALUES(?,?,?,?)"
+
+            const data = [
+                partyname,
+                repname,
+                logo,
+                slogan
+            ]
+
+            /// send user info to database
+            db.query(query, [...data], (err, data) => {
+                if (err) return res.json(err)
+                return res.json(data)
+            })
+        }
+
     })
+
 }
 
 // Get All Parties Data

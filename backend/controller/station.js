@@ -1,7 +1,7 @@
 /************ Station ***************/
 import db from '../model/db.js'
-import pkg from 'bcryptjs'
-const { genSaltSync, hashSync } = pkg
+
+
 
 // Register Station
 const registerStation = (req, res) => {
@@ -11,17 +11,29 @@ const registerStation = (req, res) => {
         contact
     } = req.body
 
-    /// send user info to database
-    const query = "INSERT INTO stations(stationname, admin, contact) VALUES(?,?,?)"
-    const data = [
-        stationname,
-        admin,
-        contact
-    ]
-    db.query(query, [...data], (err, data) => {
-        if (err) return res.json(err)
-        return res.json(data)
+    //CHECK EXISTING Station
+    const query0 = "SELECT * FROM users WHERE username = ?"
+
+    db.query(query0, username, (err, data) => {
+        if (err) return res.status(500).json(err)
+        if (data.length) {
+            return res.status(409).json("User Already exists!")
+        } else {
+            /// send user info to database
+            const query = "INSERT INTO stations(stationname, admin, contact) VALUES(?,?,?)"
+            const data = [
+                stationname,
+                admin,
+                contact
+            ]
+            db.query(query, [...data], (err, data) => {
+                if (err) return res.json(err)
+                return res.json(data)
+            })
+        }
     })
+
+
 }
 
 // Get All Stations 

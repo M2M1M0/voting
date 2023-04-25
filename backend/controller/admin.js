@@ -21,39 +21,53 @@ const signupAdmin = (req, res) => {
     } = req.body
 
     // console.log(req.body)
+    //CHECK EXISTING USER
+    const query0 = "SELECT * FROM users WHERE username = ?"
 
-    if (password != conpassword) {
-        console.log("password not match")
-        return res.json({
-            Error: 0,
-            message: "Password don't match"
-        })
-    }
+    db.query(query0, username, (err, data) => {
+        if (err) return res.status(500).json(err)
+        if (data.length) {
+            return res.status(409).json("User Already exists!")
+        } else {
 
-    const salt = genSaltSync(10)
-    const hashedPassword = hashSync(password, salt)
+            if (password != conpassword) {
+                console.log("password not match")
+                return res.json({
+                    Error: 0,
+                    message: "Password don't match"
+                })
+            }
 
-    /// send user info to database
-    const query = "INSERT INTO  " +
-        "users(fname, midname, lname, phone, email, station, gender, dob, username, password, userRole) " +
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?)"
-    const data = [
-        fname,
-        midname,
-        lname,
-        phone,
-        email,
-        station,
-        gender,
-        dob,
-        username,
-        hashedPassword,
-        userRole
-    ]
-    db.query(query, [...data], (err, data) => {
-        if (err) return res.json(err)
-        return res.json(data)
+            const salt = genSaltSync(10)
+            const hashedPassword = hashSync(password, salt)
+
+            /// send user info to database
+            const query = "INSERT INTO  " +
+                "users(fname, midname, lname, phone, email, station, gender, dob, username, password, userRole) " +
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?)"
+            const data = [
+                fname,
+                midname,
+                lname,
+                phone,
+                email,
+                station,
+                gender,
+                dob,
+                username,
+                hashedPassword,
+                userRole
+            ]
+            db.query(query, [...data], (err, data) => {
+                if (err) return res.json(err)
+                return res.json(data)
+            })
+
+        }
+
     })
+
+
 }
 
 // Get All Admins Data

@@ -1,0 +1,84 @@
+/************ VOtes ***************/
+import db from '../model/db.js'
+
+
+const submitVote = (req, res) => {
+    const {
+        username,
+        partyname,
+        stationname
+    } = req.body
+
+    const query = "INSERT INTO votes(voterId, partyname, stationname) VALUES(?,?,?)"
+    const data = [
+        username,
+        partyname,
+        stationname
+    ]
+
+    console.log(data, "data")
+    db.query("SELECT * FROM votes WHERE voterId = ?", username, (err, data) => {
+        if (err) return res.status(500).json(err)
+            // console.log(data[0].voterId, "response")
+        if (data.length) {
+            // console.log(data[0], "Invalid second times")
+            return res.status(409).json("Invalid second times")
+        } else {
+            db.query(query, [...data], (err, data) => {
+                if (err) return res.json(err)
+                if (data) {
+                    console.log(data, "submitted response")
+                    return res.json("Vote submitted")
+                }
+            })
+        }
+    })
+
+}
+
+const getVotes = (req, res) => {
+
+    const query = "SELECT * FROM votes"
+
+    db.query(query, (err, data) => {
+        if (err) return res.json(err)
+        res.json(data)
+    })
+}
+
+const getCandidates = (req, res) => {
+
+    const query =
+        "SELECT * FROM " +
+        "parties JOIN participateIn " +
+        "ON parties.partyname = participateIn.partyname " +
+        "WHERE stationname = ?"
+
+    const { station } = req.params
+
+    db.query(query, station, (err, data) => {
+        if (err) return res.json(err)
+        res.json(data)
+    })
+}
+
+const getAllCandidates = (req, res) => {
+
+    const query =
+        "SELECT * FROM " +
+        "parties JOIN participateIn " +
+        "ON parties.partyname = participateIn.partyname "
+
+    db.query(query, (err, data) => {
+        if (err) return res.json(err)
+        res.json(data)
+    })
+}
+
+
+export {
+    submitVote,
+    getCandidates,
+    getAllCandidates,
+    getVotes
+}
