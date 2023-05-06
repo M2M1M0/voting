@@ -59,12 +59,23 @@ return(
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
                 
                     <div className="text-center mb-8 text-2xl">
-                        {/* <span className="p-3">Username: </span>  {admin.username} */}
                     </div>
+                    {error && 
+                        <div className="bg-red-300 text-red-900 text-1xl p-3 mx-16 w-full">
+                            {error}
+                        </div>
+
+                        }
+                        {success && 
+                        <div className="bg-emerald-200 text-emerald-900 text-2xl p-3 mx-16 w-full">
+                            {success}
+                        </div>
+
+                        }
                     <hr />
                     <div className='space-y-4'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Party Name <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Party Name </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -74,7 +85,7 @@ return(
                                     onChange={(e) => handleChange(e)} />
                             </div>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Representative Name <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Representative Name </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -85,7 +96,7 @@ return(
                             </div>
                             
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Logo <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Logo </label>
                                 <input 
                                     className="p-1" 
                                     type="file" 
@@ -107,18 +118,7 @@ return(
                                 </textarea> 
                             </div>
                             
-                            {error && 
-                            <div className="bg-red-300 text-red-900 text-1xl p-3 mx-16 w-2/5">
-                                {error}
-                            </div>
-
-                            }
-                            {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-2xl p-3 mx-16 w-2/5">
-                                {success}
-                            </div>
-
-                            }
+                            
 
                             <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 text-center gap-1 sm:gap-3  text-black  py-5'>
                                 <button 

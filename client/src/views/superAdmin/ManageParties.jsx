@@ -12,6 +12,7 @@ export default function ManageParties(){
 
     const [ party, setParty ] = useState([])
     const [ searchkey, setSearch ] = useState([])
+    const [ find , setFind ] = useState([])
 
     const [ error, setError ] = useState(false)
 
@@ -20,12 +21,24 @@ export default function ManageParties(){
         // Search 
         axios.get("http://localhost:8800/party/search/"+key)
             .then(response => {
-                console.log(response.data[0], "result") 
+                // console.log(response.data, "result") 
+                setFind(response.data)
+                if(response.data.length === 0){
+                    setError("Search not Found")
+                }
             })
             .catch(error => {
                 setError(error.message)
                 console.log(error.message)
             })
+
+        setTimeout(() => {
+            setError(false)
+        }, 3000)
+    }
+
+    const reload = () => {
+        setFind([])
     }
 
     const handleDelete = (id) => {
@@ -71,16 +84,20 @@ return(
                                 type="text" 
                                 name="key"
                                 onChange={(e) => setSearch(e.target.value)}
-                                placeholder=" Search.."/>  
+                                placeholder=" Search Candidate"/>  
 
-                            <button className=" px-2 rounded-r-2xl bg-slate-950 text-white hover:bg-slate-700 ">
+                            <button 
+                                onClick={() => search(searchkey)}
+                                className=" px-2 rounded-r-2xl bg-slate-950 text-white hover:bg-slate-700 ">
+                                
                                 <MdSearch 
-                                    onClick={() => search(searchkey)}
                                     className="text-4xl"/>
                             </button> 
                         </div>
                          
-                        <button className="p-1 px-3 border-neutral-600 bg-sky-300 text-lg font-mono rounded-2xl hover:bg-sky-400 hover:text-white">
+                        <button
+                            onClick={(e) => reload()} 
+                            className="p-1 px-3 border-neutral-600 bg-sky-300 text-lg font-mono rounded-2xl hover:bg-sky-400 hover:text-white">
                             Reload
                         </button>  
                     </div>  
@@ -107,14 +124,41 @@ return(
                             </tr>
                         </thead>
                         <tbody>
-                            {party.length ? party.map((party, index) => (
+                            {find.length ? find.map((found, index) => (
+                            <tr className="border" key={found._id}>
+                                <td className="p-3 ">{index + 1}</td>
+                                <td className="font-extrabold">{found.partyname} </td>
+                                <td className="font-mono ">{found.repname}</td>
+                                <td><img 
+                                    className="w-16 h-16"
+                                    src={found.logo} alt="" />
+                                </td>
+                                <td className="flex text-base space-x-6 mt-2">
+                                    <Link to={'/superAdmin/manageSingleParty/'+ found._id}>
+                                        <div className="rounded-3xl px-3 py-1 text-white font-bold bg-sky-500 hover:bg-sky-300">
+                                            <AiOutlineFolderView className="text-2xl" />
+                                        </div>
+                                    </Link>
+                                    <Link to={`/superAdmin/updateParty/${found._id}`}>
+                                        <div className="rounded-3xl px-3 py-1 text-white font-bold bg-amber-600 hover:bg-amber-400 cursor-pointer">
+                                            <RxUpdate className="text-2xl"/>
+                                        </div>
+                                    </Link>
+
+                                    <div onClick={() => handleDelete(found._id)}
+                                        className="rounded-3xl px-3 py-1 text-white font-bold bg- bg-red-800 hover:bg-red-500 cursor-pointer"  >
+                                        <MdDelete className="text-2xl" />
+                                    </div>
+                                </td>
+                            </tr>
+                            )) : party.length ? party.map((party, index) => (
                             <tr className="border" key={party._id}>
                                 <td className="p-3 ">{index + 1}</td>
                                 <td className="font-extrabold">{party.partyname} </td>
                                 <td className="font-mono ">{party.repname}</td>
                                 <td><img 
                                     className="w-16 h-16"
-                                    src={party.phone} alt="" />
+                                    src={party.logo} alt="" />
                                 </td>
                                 <td className="flex text-base space-x-6 mt-2">
                                     <Link to={'/superAdmin/manageSingleParty/'+ party._id}>

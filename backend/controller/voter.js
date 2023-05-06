@@ -32,11 +32,8 @@ const sinupVoter = (req, res) => {
         } else {
 
             if (password != conpassword) {
-                console.log("password not match")
-                return res.json({
-                    Error: 0,
-                    message: "Password don't match"
-                })
+                // console.log("password not match")
+                return res.status(408).json("Password don't match") ///// Change Diff in Password status
             }
 
             const salt = genSaltSync(10)
@@ -133,13 +130,14 @@ const deleteVoter = (req, res) => {
 // Search for Voter Data
 const searchVoter = (req, res) => {
     const { key } = req.params
-    const query = "SELECT * FROM users WHERE fname LIKE ? or phone LIKE ? and userRole = 'voter'"
+    const input = "%" + key + "%"
+    const query = "SELECT * FROM users WHERE userRole = 'voter' and ( fname LIKE ? or midname LIKE ? or lname LIKE ? or phone LIKE ? ) "
     const keys = [
-        key, key
+        input, input, input, input
     ]
     db.query(query, [...keys], (err, data) => {
         if (err) return res.json(err)
-        res.json(data)
+        return res.json(data)
             // console.log(data, "response")
     })
 }

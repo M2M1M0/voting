@@ -102,13 +102,14 @@ const updateParty = (req, res) => {
 // Search for Party Data
 const searchParty = (req, res) => {
     const { key } = req.params
+    const input = "%" + key + "%"
     const query = "SELECT * FROM parties WHERE partyname LIKE ? or repname LIKE ?"
     const keys = [
-        key, key
+        input, input
     ]
     db.query(query, [...keys], (err, data) => {
         if (err) return res.json(err)
-        res.json(data)
+        return res.json(data)
             // console.log(data, "response")
     })
 }

@@ -1,4 +1,5 @@
 import express from 'express'
+import { verifyToken } from '../controller/auth.js'
 import {
     submitVote,
     getCandidates,
@@ -6,7 +7,6 @@ import {
     getVotes
 } from '../controller/votes.js'
 const voteRouter = express.Router()
-
 
 
 // Give Vote

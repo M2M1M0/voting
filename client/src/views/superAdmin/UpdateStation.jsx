@@ -65,12 +65,23 @@ function UpdateStation() {
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
                 
                     <div className="text-center mb-8 text-2xl">
-                        {/* <span className="p-3">Username: </span>  {admin.username} */}
                     </div>
+                    {error && 
+                    <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-full">
+                        {error}
+                    </div>
+
+                    }
+                    {success && 
+                    <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-full">
+                        {success}
+                    </div>
+
+                    }
                     <hr />
                     <div className='space-y-4'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Station Name <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Station Name </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -80,7 +91,7 @@ function UpdateStation() {
                                     onChange={(e) => handleChange(e)} />
                             </div>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Admin Username <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Admin Username </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -106,18 +117,7 @@ function UpdateStation() {
                         <div className='space-y-4'>
                             
                             
-                            {error && 
-                            <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-3/4">
-                                {error}
-                            </div>
-
-                            }
-                            {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-3/4">
-                                {success}
-                            </div>
-
-                            }
+                           
 
                             <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 text-center gap-1 sm:gap-3  text-black  py-5'>
                                 <button 

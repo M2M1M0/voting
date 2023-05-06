@@ -32,10 +32,7 @@ const signupAdmin = (req, res) => {
 
             if (password != conpassword) {
                 console.log("password not match")
-                return res.json({
-                    Error: 0,
-                    message: "Password don't match"
-                })
+                return res.status(408).json("Paaasword Doesn't match")
             }
 
             const salt = genSaltSync(10)
@@ -133,13 +130,14 @@ const deletedmin = (req, res) => {
 // Search for Admin Data
 const searchAdmin = (req, res) => {
     const { key } = req.params
-    const query = "SELECT * FROM users WHERE fname LIKE ?  or phone LIKE ? and userRole = 'administrator' "
+    const input = "%" + key + "%"
+    const query = "SELECT * FROM users WHERE userRole = 'administrator' AND ( fname LIKE ?  OR midname LIKE ? OR lname LIKE ? OR phone LIKE ? ) "
     const keys = [
-        key, key, key, key
+        input, input, input, input
     ]
     db.query(query, [...keys], (err, data) => {
         if (err) return res.json(err)
-        res.json(data)
+        return res.json(data)
             // console.log(data, "response")
     })
 }

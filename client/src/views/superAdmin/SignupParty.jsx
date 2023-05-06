@@ -1,11 +1,17 @@
 import axios from 'axios'
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Menu from "./components/Menu";
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import Menu from "./components/Menu"
 
+const initialState = {
+    partyname : "",
+    repname : "",
+    logo : "",
+    slogan : ""
+}
 
 export default function SignupParty(){
-    const [ party, setParty ] = useState([])
+    const [ party, setParty ] = useState(initialState)
 
     const [ error, setError ] = useState(false)
     const [ success, setSuccess ] = useState(false)
@@ -16,11 +22,16 @@ export default function SignupParty(){
 
     const handleSubmit = (e) => {
     e.preventDefault()
+
+    if(party.partyname === "" || party.repname === "" || party.logo === ""){
+        alert("Fields with '*' not be empty!")
+    } else {
         // Register Party
     axios.post("http://localhost:8800/party/signup", party)
         .then(res => {
-            console.log(res, "response")
+            // console.log(res, "response")
             setSuccess("Successfully Register")
+            setParty(initialState)
         })
         .catch(err => {
             console.log(err)
@@ -30,7 +41,9 @@ export default function SignupParty(){
         setTimeout(() => {
             setSuccess(false)
             setError(false)
-        }, 3000)
+        }, 4000)
+    }
+
     }
 
 return(
@@ -46,6 +59,18 @@ return(
                     <p className=''>National election board of ethiopia</p>
                 </div>
                 <div className="px-3 pb-4 pt-2 sm:px-16 sm:py-8 overflow-scroll" >
+                    {error && 
+                    <div className="bg-red-300 text-red-900 text-base p-3 mx-16 ">
+                        {error}
+                    </div>
+
+                    }
+                    {success && 
+                    <div className="bg-emerald-200 text-emerald-900 text-base p-3 mx-16 ">
+                        {success}
+                    </div>
+
+                    }
                     <div className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
                         <div className='space-y-4'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
@@ -55,7 +80,7 @@ return(
                                     type="text"
                                     name='partyname'
                                     required
-                                    defaultValue={party.partyname}
+                                    value={party.partyname}
                                     onChange={(e) => handleChange(e)} />
                             </div>
                             <div className='flex flex-col gap-2  text-black pr-24'>
@@ -65,7 +90,7 @@ return(
                                     type="text"
                                     name='repname'
                                     required
-                                    defaultValue={party.repname}
+                                    value={party.repname}
                                     onChange={(e) => handleChange(e)} />
                             </div>
                             
@@ -76,7 +101,7 @@ return(
                                     type="file" 
                                     name='logo'
                                     required
-                                    defaultValue={party.logo}
+                                    value={party.logo}
                                     onChange={(e) => handleChange(e)} />
                             </div>
                             
@@ -87,24 +112,11 @@ return(
                                 <textarea 
                                     className="p-1 bg-slate-200"
                                     name='slogan'
-                                    defaultValue={party.slogan}
+                                    value={party.slogan}
                                     onChange={(e) => handleChange(e)}  > 
                                 </textarea> 
                             </div>
                             
-                            
-                            {error && 
-                            <div className="bg-red-300 text-red-900 text-base p-3 mx-16 ">
-                                {error}
-                            </div>
-
-                            }
-                            {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 mx-16 ">
-                                {success}
-                            </div>
-
-                            }
 
                             <div className='grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 text-center gap-1 sm:gap-3  text-black  py-5'>
                                 <button 
@@ -114,10 +126,10 @@ return(
                                         SUBMIT
                                     </Link>
                                 </button>
-                                <button className='px-5 py-1 rounded-l rounded-r hover:border-2'>
-                                    <Link to={'/'}>
+                                <button 
+                                    onClick={(e) => setParty(initialState)}
+                                    className='px-5 py-1 rounded-l rounded-r hover:border-2'>
                                         RESET
-                                    </Link>
                                 </button>
                                 <Link 
                                     className='px-5 py-1 rounded-l rounded-r-3xl bg-slate-400 hover:bg-slate-500'

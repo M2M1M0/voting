@@ -1,40 +1,61 @@
-import { useContext, useState } from "react"
+import axios from "axios"
+import { useContext,  useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { AuthContext } from '../context/authContext'
+import { AuthContext } from "../context/authContext"
+
 
 export default function Login() {
     
-    const { login } = useContext(AuthContext)
+    const { user, loading, error, dispatch } = useContext(AuthContext)
     const navigate = useNavigate()
 
-    const [ userAuth, setUserAuth ] = useState({
+    const [ credentials, setCredentials ] = useState({
         username : "",
         password : ""
     })
-    const [ error, setError] = useState(false)
-
-
+    
     const handleChange = (e) => {
-        setUserAuth((prev) => ({...prev, [e.target.name] : e.target.value}) )
+        setCredentials((prev) => ({...prev, [e.target.name] : e.target.value}) )
     }
 
     const handleSubmit = async (e) => {
-        console.log(userAuth.username, "username")
-        console.log(userAuth.password, "password")
-        e.preventDefault();
-        try {
-          await login(userAuth)
-        //   navigate("/admin")
-        } catch (err) {
-          setError(err)
-
+    e.preventDefault();
+        dispatch({ type: "LOGIN_START" })
+    try {
+        const res = await axios.post("http://localhost:8800/auth/login", credentials)
+        console.log(res.data, "response")
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.data })
+        if(user.userRole === "voter"){
+            const station = user.station
+            navigate(`/voter/castVote/${station}`)
+            
+        } else if(user.userRole === "administrator"){
+            navigate("/admin")
         }
-        
-        setTimeout(() => {
-            setError(false)
-        }, 4000)
+    } catch (err) {
+        dispatch({ type: "LOGIN_FAILURE", payload: err.response.data })
     }
+    }
+    
 
+
+    
+
+    // if(error.response.status === 404 ) 
+    // {
+    //     // console.log(err.response.data)
+    //     setError("User not found")
+
+    // } else if(error.response.status === 400 ) {
+    //     // console.log(error.response.status, "Bad request")
+    //     setError("Wrong username or password")
+    // } else if(error.response.status === 500 ) {
+    //     // console.log(error.response.status, "Bad request")
+    //     setError("Network Error")
+    // } else {
+    //     setError(error.message)
+    // }
+   
     return(
     <>
     <div className="h-screen w-screen sm:py-20 py-10 pl-16">
@@ -44,7 +65,7 @@ export default function Login() {
             </h1>
             { error && 
             <div className="text-base p-5 text-red-800 bg-red-300 w-full mr-2">
-                {error.message}
+                {error}
             </div>
             }
             <form action="" className="text-white px-8">
@@ -74,10 +95,10 @@ export default function Login() {
                     </div>
                     <div className="text-center">
                         <button
-                            
-                            onClick={() => handleSubmit} 
+                            onClick={(e) => handleSubmit(e)} 
+                            disabled={loading}
                             className="px-8 py-2 rounded-2xl bg-white text-black hover:bg-slate-200">
-                            Login
+                            {loading ? <>loading</> : <>Login</> }
                         </button>
                     </div>
                 </div>

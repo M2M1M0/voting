@@ -32,20 +32,36 @@ export default function SignupAdmin(){
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if(voter.fname === '' || voter.midname === '' || voter.lname === '' || voter.phone === '' || voter.station === '' || voter.gender === '' || voter.dob === '' || voter.username === '' || voter.password === ''){
+            alert("Fields with '*' must be filled!")
+        } else {
         try{
             await axios.post("http://localhost:8800/voter/signup", voter)
                 .then(res => {
                     console.log(res)
                     setSuccess("Successfully Register")
+                    setVoter(initialState)
             })
-        } catch(err){
-            console.log(err)
-            setError(err.message)
+        } catch(error){
+            // console.log(err)
+            
+            if(error.response.status === 409 ) 
+            {
+                // console.log(err.response.data)
+                setError("User Already exist!")
+
+            }else if(error.response.status === 408 ){
+                setError("Password Doesn't Match!")
+            } else {
+                setError(error.message)
+            }
+           
         }   
         setTimeout(() => {
             setSuccess(false)
             setError(false)
-        }, 3000) 
+        }, 4000) 
+        }
     }
 
     useEffect(() => {
@@ -58,10 +74,10 @@ export default function SignupAdmin(){
 return(
     <>
     <div className="flex flex-row h-screen">
-        <div className="w-1/5">
-            <Menu />
-        </div>
-        <div className="pl-2 w-4/5">
+        <div className="w-1/6">
+                <Menu />
+            </div>
+        <div className="pl-2 pt-3 w-5/6">
             <div className="flex flex-col h-screen">
                 <div className="h-16 w-full flex flex-col text-center bg-gray-950 text-white">
                     <h1 className='font-semibold text-base sm:text-2xl'>Register Now</h1>
@@ -69,7 +85,19 @@ return(
                 </div>
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
                 
-                    {/* {console.log(voter)} */}
+                    {error && 
+                    <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-full">
+                        {error}
+                    </div>
+
+                    }
+                    {success && 
+                    <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-full">
+                        {success}
+                    </div>
+
+                    }
+
                     <div 
                         className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-1 md:grid-cols-2">
                         <div className='space-y-2'>
@@ -78,7 +106,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={voter.fname}
+                                    value={voter.fname}
                                     name='fname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -88,7 +116,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={voter.midname}
+                                    value={voter.midname}
                                     name='midname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -98,7 +126,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={voter.lname}
+                                    value={voter.lname}
                                     name='lname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -111,7 +139,7 @@ return(
                                     placeholder='+251..'
                                     maxLength={10}
                                     minLength={10}
-                                    defaultValue={voter.phone}
+                                    value={voter.phone}
                                     name='phone'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -122,7 +150,7 @@ return(
                                     className="bg-slate-200 border-black p-1" 
                                     type="email" 
                                     placeholder='example@gmail.com'
-                                    defaultValue={voter.email}
+                                    value={voter.email}
                                     name='email'
                                     onChange={e => handleChange(e)} />
                             </div>
@@ -172,7 +200,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="date" 
-                                    defaultValue={voter.dob}
+                                    value={voter.dob}
                                     name="dob"
                                     required
                                     onChange={e => handleChange(e)}/>
@@ -182,7 +210,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text" 
-                                    defaultValue={voter.username}
+                                    value={voter.username}
                                     name="username"
                                     placeholder='Resident ID No.'
                                     onChange={e => handleChange(e)}/>
@@ -192,7 +220,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="password"
-                                    defaultValue={voter.password}
+                                    value={voter.password}
                                     name="password"
                                     required
                                     onChange={e => handleChange(e)} />
@@ -202,7 +230,7 @@ return(
                                 <input 
                                     className="bg-slate-300 border-black p-1" 
                                     type="password" 
-                                    defaultValue={voter.conpassword}
+                                    value={voter.conpassword}
                                     name="conpassword"
                                     required
                                     onChange={e => handleChange(e)}/>
@@ -213,19 +241,8 @@ return(
                                     name="userRole"
                                     onChange={e => handleChange(e)}/>
                             </div>
-                            {error && 
-                            <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-3/4">
-                                {error}
-                            </div>
-
-                            }
-                            {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-3/4">
-                                {success}
-                            </div>
-
-                            }
-                            <div className='flex flex-row text-center gap-1 sm:gap-3  text-black py-12 pl-3'>
+                            
+                            <div className='flex flex-row text-center gap-1 sm:gap-3  text-black py-8 pl-3'>
                                 <button 
                                     onClick={e => handleSubmit(e)}
                                     type="submit"
@@ -233,6 +250,7 @@ return(
                                         SUBMIT
                                 </button>
                                 <button 
+                                    onClick={(e) => setVoter(initialState)}
                                     className='px-5 py-1 rounded-l rounded-r hover:border-2'>
                                         RESET
                                 </button>

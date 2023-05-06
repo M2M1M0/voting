@@ -1,5 +1,6 @@
 import {} from 'dotenv/config'
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
 // Import Routes
@@ -19,12 +20,14 @@ const app = express()
 const port = process.env.PORT || 5000
 
 // Middleware
+app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
 
 // Default / start page
 app.get('/', (req, res) => {
     res.send('Hello fom backend')
+        // console.log(req.cookies)
 })
 
 // Register Routes

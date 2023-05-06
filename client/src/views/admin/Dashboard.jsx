@@ -7,10 +7,10 @@ return(
     <>
     <div>
         <div className="flex flex-row">
-            <div className="w-1/5">
+            <div className="w-1/6">
                 <Menu />
             </div>
-            <div className="pl-2 pt-3 w-4/5">
+            <div className="pl-2 pt-3 w-5/6">
                 <div className="flex flex-col space-y-4">
                     <div className="font-semibold text-5xl text-sky-700">
                         <h1>Dashboard</h1>
@@ -51,7 +51,7 @@ return(
                             </div>
                         </div>
                         <div className="text-right">
-                            <h1 className="text-white px-3 pb-2">logo</h1>
+                            <h1 className="text-white px-3 pb-2">@</h1>
                         </div>
                     </div>
                     <div className="text-center ">

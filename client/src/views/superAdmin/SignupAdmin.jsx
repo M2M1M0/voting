@@ -32,20 +32,36 @@ export default function SignupAdmin(){
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        try{
-            // Register Admin
-            await axios.post("http://localhost:8800/admin/signup", admin)
-                .then(() => {
-                    setSuccess("Successfully Register")
-            })
-        } catch(err){
-            console.log(err)
-            setError(err.message)
-        }    
-        setTimeout(() => {
-            setSuccess(false)
-            setError(false)
-        }, 3000)
+
+        if(admin.fname === '' || admin.midname === '' || admin.lname === '' || admin.phone === '' || admin.station === '' || admin.gender === '' || admin.dob === '' || admin.username === '' || admin.password === ''){
+            alert("Fields with '*' must be filled")
+        } else {
+            try{
+                // Register Admin
+                await axios.post("http://localhost:8800/admin/signup", admin)
+                    .then(() => {
+                        setSuccess("Successfully Register")
+                        setAdmin(initialState)
+                })
+            } catch(error){
+                console.log(error)
+                if(error.response.status === 409 ) 
+                {
+                    // console.log(err.response.data)
+                    setError("User Already exist!")
+    
+                } else if(error.response.status === 408 ){
+                    setError("Password Doesn't Match!")
+                }else {
+                    setError(error.message)
+                }
+            }    
+            setTimeout(() => {
+                setSuccess(false)
+                setError(false)
+            }, 4000)
+
+        }
     }
     
 
@@ -70,16 +86,15 @@ return(
                     <p className=''>National election board of ethiopia</p>
                 </div>
                 <div className="pl-10 pb-4 pt-2 sm:px-16 md:px-8 sm:py-8 overflow-scroll" >
-                <form>
-                    <div 
-                        className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-1 md:grid-cols-2">
+                {/* <form> */}
+                    <div className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-1 md:grid-cols-2">
                         <div className='space-y-2'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
                                 <label htmlFor="">First Name <span className='text-red-500 text-3xl'>*</span></label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={admin.fname}
+                                    value={admin.fname}
                                     name='fname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -89,7 +104,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={admin.midname}
+                                    value={admin.midname}
                                     name='midname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -99,7 +114,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
-                                    defaultValue={admin.lname}
+                                    value={admin.lname}
                                     name='lname'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -112,7 +127,7 @@ return(
                                     placeholder='+251..'
                                     maxLength={10}
                                     minLength={10}
-                                    defaultValue={admin.phone}
+                                    value={admin.phone}
                                     name='phone'
                                     required
                                     onChange={e => handleChange(e)} />
@@ -123,28 +138,28 @@ return(
                                     className="bg-slate-200 border-black p-1" 
                                     type="email" 
                                     placeholder='example@gmail.com'
-                                    defaultValue={admin.email}
+                                    value={admin.email}
                                     name='email'
                                     onChange={e => handleChange(e)} />
                             </div>
                             <div className='flex flex-col gap-2  text-black pr-24'>
                                 <label htmlFor="">Station Name<span className='text-red-500 text-3xl'>*</span></label>
-                                    <select     
-                                        defaultValue={admin.station}
-                                        name="station" 
-                                        required
-                                        className="bg-slate-200"
-                                        onChange={e => handleChange(e)}>
-                                        <option value="0" ></option>
-                                   { stations.length ? stations.map((station, index) => (
-                                        <option 
-                                            key={index}
-                                            value={station.stationname}>
-                                                {station.stationname}
-                                        </option>
-                                    )) : null}
-                                    
-                                    </select>
+                                <select     
+                                    value={admin.station}
+                                    name="station" 
+                                    required
+                                    className="bg-slate-200"
+                                    onChange={e => handleChange(e)}>
+                                    <option value="0" ></option>
+                                { stations.length ? stations.map((station, index) => (
+                                    <option 
+                                        key={index}
+                                        value={station.stationname}>
+                                            {station.stationname}
+                                    </option>
+                                )) : null}
+                                
+                                </select>
                             </div>
                         </div>
                         <div className='space-y-2'>
@@ -173,7 +188,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="date" 
-                                    defaultValue={admin.dob}
+                                    value={admin.dob}
                                     name="dob"
                                     required
                                     onChange={e => handleChange(e)}/>
@@ -183,7 +198,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text" 
-                                    defaultValue={admin.username}
+                                    value={admin.username}
                                     name="username"
                                     placeholder='Resident ID No.'
                                     onChange={e => handleChange(e)}/>
@@ -193,7 +208,7 @@ return(
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="password"
-                                    defaultValue={admin.password}
+                                    value={admin.password}
                                     name="password"
                                     required
                                     onChange={e => handleChange(e)} />
@@ -203,7 +218,7 @@ return(
                                 <input 
                                     className="bg-slate-300 border-black p-1" 
                                     type="password" 
-                                    defaultValue={admin.conpassword}
+                                    value={admin.conpassword}
                                     name="conpassword"
                                     required
                                     onChange={e => handleChange(e)}/>
@@ -234,7 +249,7 @@ return(
                                         SUBMIT
                                 </button>
                                 <button 
-                                    onClick={() => setAdmin(null)}
+                                    onClick={(e) => setAdmin(initialState)}
                                     className='px-5 py-1 rounded-l rounded-r hover:border-2'>
                                         RESET
                                 </button>
@@ -250,7 +265,7 @@ return(
                             </div>
                         </div>
                     </div>
-                </form>
+                {/* </form> */}
 
                 </div>
             </div>

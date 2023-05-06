@@ -94,9 +94,10 @@ const deleteStation = (req, res) => {
 // Search for Station Data
 const searchStation = (req, res) => {
     const { key } = req.params
+    const input = "%" + key + "%"
     const query = "SELECT * FROM stations WHERE stationname LIKE ? or contact LIKE ?"
     const keys = [
-        key, key
+        input, input
     ]
     db.query(query, [...keys], (err, data) => {
         if (err) return res.json(err)

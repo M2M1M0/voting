@@ -1,17 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Menu from "./components/Menu";
 import { Link } from "react-router-dom";
 import  { MdPersonSearch } from 'react-icons/md'
 import  { RxUpdate } from 'react-icons/rx'
 import  { TiUserDelete } from 'react-icons/ti'
+import useFetch from "../../hooks/useFetch";
 
 
 export default function ManageAdmins(){
 
-    const [ voter, setVoter ] = useState([])
+    const { data,  error, reFetch } = useFetch("http://localhost:8800/voter");
+
+    
+    const setError = useRef(false)
+  
     const [ searchkey, setSearch ] = useState([])
-    const [ error, setError ] = useState(false)
+    const [ find, setFind ] = useState([])
+
 
     const handleDelete = (id) => {
         if(window.confirm("Are you sure! you want to delete this Voter?")){
@@ -30,24 +36,28 @@ export default function ManageAdmins(){
         // Search 
         axios.get("http://localhost:8800/voter/search/"+key)
             .then(response => {
-                console.log(response.data[0], "result") 
+                // console.log(response.data, "result") 
+                setFind(response.data)
+                if(response.data.length === 0){
+                    setError("Search not Found")
+                }
             })
             .catch(error => {
                 setError(error.message)
                 console.log(error.message)
             })
+
+        setTimeout(() => {
+            setError(false)
+        }, 3000)
+    }
+
+    const reload = () => {
+        setFind([])
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8800/voter")
-            .then(response => {
-                // console.log(response.data) 
-                setVoter(response.data)
-            })
-            .catch(error => {
-                setError(error.message)
-                console.log(error.message)
-            })
+        reFetch()
     })
 
 return(
@@ -69,16 +79,19 @@ return(
                                 type="text" 
                                 name="key"
                                 onChange={e => setSearch(e.target.value)}
-                                placeholder=" Search by Username/Phone"/>  
+                                placeholder=" Search by Name/Phone Number"/>  
 
-                            <button className=" px-2 rounded-r-2xl bg-slate-950 text-white ">
+                            <button 
+                                onClick={() => search(searchkey)}
+                                className=" px-2 rounded-r-2xl bg-slate-950 text-white ">
                                 <MdPersonSearch 
-                                    onClick={() => search(searchkey)}
                                     className="text-4xl"/>
                             </button> 
                         </div>
                          
-                        <button className="p-1 px-3 border-neutral-600 bg-sky-300 text-lg font-mono rounded-2xl hover:bg-sky-400 hover:text-white">
+                        <button 
+                            onClick={(e) => reload()} 
+                            className="p-1 px-3 border-neutral-600 bg-sky-300 text-lg font-mono rounded-2xl hover:bg-sky-400 hover:text-white">
                             Reload
                         </button>  
                     </div>  
@@ -107,7 +120,28 @@ return(
                             </tr>
                         </thead>
                         <tbody>
-                            {voter && voter.map((user, index) => (
+                            {find.length ? find.map((found, index) => (
+                            <tr className="border" key={found._id}>
+                                 <td className="p-3 ">{index + 1}</td>
+                                <td className="font-mono ">{found.fname}  {found.midname}  {found.lname}</td>
+                                <td className="font-extrabold">{found.username}</td>
+                                <td>{found.phone}</td>
+                                <td>{found.email}</td>
+                                <td>{found.station}</td>
+                                <td className="flex text-base space-x-6 mt-2">
+                                    <Link to={`/admin/updateVoter/${found._id}`}>
+                                        <div className="rounded-3xl px-3 py-1 text-white font-bold bg-amber-600 hover:bg-amber-400 cursor-pointer">
+                                            <RxUpdate className="text-2xl"/>
+                                        </div>
+                                    </Link>
+
+                                    <div onClick={() => handleDelete(found._id)}
+                                        className="rounded-3xl px-3 py-1 text-white font-bold bg- bg-red-800 hover:bg-red-500 cursor-pointer"  >
+                                        <TiUserDelete className="text-2xl" />
+                                    </div>
+                                </td>
+                            </tr>
+                            )) : data.length ? data.map((user, index) => (
                             <tr className="border" key={user._id}>
                                  <td className="p-3 ">{index + 1}</td>
                                 <td className="font-mono ">{user.fname}  {user.midname}  {user.lname}</td>
@@ -128,7 +162,7 @@ return(
                                     </div>
                                 </td>
                             </tr>
-                            ))}
+                            )) : null }
                         </tbody>
                         
                     </table>

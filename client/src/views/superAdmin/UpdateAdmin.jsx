@@ -29,7 +29,7 @@ export default function UpdateAdmin(){
         setTimeout(() => {
             setSuccess(false)
             setError(false)
-        }, 3000)   
+        }, 4000)   
     }
 
     useEffect(() => {
@@ -61,12 +61,26 @@ return(
                     <div className="text-center mb-8 text-2xl">
                         <span className="p-3">Username: </span>  {admin.username}
                     </div>
+                     
+                    {error && 
+                    <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-full">
+                        {error}
+                    </div>
+
+                    }
+                    {success && 
+                    <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-full">
+                        {success}
+                    </div>
+
+                    }
+
                     <hr />
                     <div
                         className="grid grid-cols-1 text-left sm:text:center  sm:grid-cols-1 md:grid-cols-2">
                         <div className='space-y-2'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">First Name <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">First Name </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -76,7 +90,7 @@ return(
                                     onChange={e => handleChange(e)} />
                             </div>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                <label htmlFor="">Middle Name <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Middle Name </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -86,7 +100,7 @@ return(
                                     onChange={e => handleChange(e)} />
                             </div>
                             <div className='flex flex-col gap-2 text-black pr-24'>
-                                <label htmlFor="">Last Name <span className='text-red-500 text-3xl'>*</span></label>
+                                <label htmlFor="">Last Name </label>
                                 <input 
                                     className="bg-slate-200 border-black p-1" 
                                     type="text"
@@ -98,7 +112,7 @@ return(
                         </div>
                         <div className='space-y-2'>
                             <div className='flex flex-col gap-2  text-black pr-24'>
-                                    <label htmlFor="">Phone Number <span className='text-red-500 text-3xl'>*</span></label>
+                                    <label htmlFor="">Phone Number </label>
                                     <input 
                                         className="bg-slate-200 border-black p-1" 
                                         type="text" 
@@ -120,24 +134,6 @@ return(
                                     name='email'
                                     onChange={e => handleChange(e)} />
                             </div>
-                            {/* <div>
-                                <input 
-                                    type="hidden" 
-                                    name="userRole"
-                                    onChange={e => handleChange(e)}/>
-                            </div> */}
-                            {error && 
-                            <div className="bg-red-300 text-red-900 text-base p-3 m-5 w-3/4">
-                                {error}
-                            </div>
-
-                            }
-                            {success && 
-                            <div className="bg-emerald-200 text-emerald-900 text-base p-3 m-5 w-3/4">
-                                {success}
-                            </div>
-
-                            }
                             <div className='flex flex-row text-center gap-1 sm:gap-3  text-black py-12 pl-3'>
                                 <button 
                                     onClick={e => handleSubmit(e)}
